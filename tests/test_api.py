@@ -18,7 +18,7 @@ class ApiTest(unittest.TestCase):
         os.environ["BEARER_TOKEN"] = "test-token"
         os.environ["BASIC_USERNAME"] = "bkuser"
         os.environ["BASIC_PASSWORD"] = "bkuser"
-        os.environ["USER_TOTAL"] = "120"
+        os.environ["USER_TOTAL"] = "121"
         os.environ.pop("BK_APP_CODE", None)
         os.environ.pop("BK_APP_SECRET", None)
         os.environ.pop("AUTH_DISABLED", None)
@@ -36,7 +36,7 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(healthz.get_json()["status"], "ok")
         self.assertEqual(index.status_code, 200)
         self.assertEqual(index.get_json()["users_api"], "/apis/v1/users")
-        self.assertEqual(index.get_json()["user_count"], 120)
+        self.assertEqual(index.get_json()["user_count"], 121)
 
     def test_users_require_auth(self):
         response = self.client.get("/apis/v1/users")
@@ -89,12 +89,12 @@ class ApiTest(unittest.TestCase):
         second = self._get("/apis/v1/users?page=2&page_size=100").get_json()
         beyond = self._get("/apis/v1/users?page=3&page_size=100").get_json()
 
-        self.assertEqual(first["count"], 120)
+        self.assertEqual(first["count"], 121)
         self.assertEqual(len(first["results"]), 100)
-        self.assertEqual(second["count"], 120)
-        self.assertEqual(len(second["results"]), 20)
+        self.assertEqual(second["count"], 121)
+        self.assertEqual(len(second["results"]), 21)
         self.assertEqual(beyond["results"], [])
-        self.assertEqual(beyond["count"], 120)
+        self.assertEqual(beyond["count"], 121)
         self.assertEqual(
             {item["id"] for item in first["results"]} & {item["id"] for item in second["results"]},
             set(),
@@ -128,6 +128,10 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(users[5]["full_name"], "孙八")
         self.assertEqual(users[5]["departments"], ["center_ba"])
         self.assertEqual(users[5]["leaders"], ["101"])
+        self.assertEqual(users[6]["username"], "zhoujiu")
+        self.assertEqual(users[6]["full_name"], "周九")
+        self.assertEqual(users[6]["departments"], ["center_ab"])
+        self.assertEqual(users[6]["leaders"], ["100"])
 
         department_ids = {item["id"] for item in departments}
         user_ids = {item["id"] for item in users}

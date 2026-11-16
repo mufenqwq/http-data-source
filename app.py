@@ -93,6 +93,17 @@ SUNBA = {
     "leaders": ["101"],
     "departments": ["center_ba"],
 }
+ZHOUJIU = {
+    "id": "106",
+    "username": "zhoujiu",
+    "full_name": "周九",
+    "email": "zhoujiu@example.com",
+    "phone": "13800138009",
+    "phone_country_code": "86",
+    "extras": {"gender": "female"},
+    "leaders": ["100"],
+    "departments": ["center_ab"],
+}
 
 DEPARTMENTS = [
     {"id": "company", "name": "总公司", "parent": None, "extras": {"region": "CN"}},
@@ -121,12 +132,12 @@ def _same(left: str, right: str) -> bool:
 
 
 def user_total() -> int:
-    raw = os.getenv("USER_TOTAL", "120").strip()
+    raw = os.getenv("USER_TOTAL", "121").strip()
     try:
         total = int(raw)
     except ValueError:
-        logger.warning("USER_TOTAL=%s is invalid, fallback to 120", raw)
-        total = 120
+        logger.warning("USER_TOTAL=%s is invalid, fallback to 121", raw)
+        total = 121
     return min(max(total, MIN_USER_TOTAL), MAX_USER_TOTAL)
 
 
@@ -143,10 +154,12 @@ def build_users() -> list[dict[str, Any]]:
         users.append(QIANQI)
     if total >= 6:
         users.append(SUNBA)
+    if total >= 7:
+        users.append(ZHOUJIU)
 
     department_ids = [item["id"] for item in DEPARTMENTS]
-    # 105 留给孙八，自动补齐的用户从 106 开始，避免 id 冲突。
-    serial = 106
+    # 105、106 分别留给孙八和周九，自动补齐的用户从 107 开始。
+    serial = 107
     while len(users) < total:
         suffix = f"{serial:04d}"
         users.append(
