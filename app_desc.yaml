@@ -1,0 +1,51 @@
+specVersion: 3
+appVersion: "1.0.0"
+app:
+  region: default
+  bkAppCode: bk-user-http-ds
+  bkAppName: 用户管理 HTTP 数据源
+  market:
+    category: 运维工具
+    introduction: 供用户管理测试通用 HTTP 数据源的模拟服务
+    description: 按通用 HTTP 数据源协议提供用户和部门分页接口，支持 Bearer Token、Basic Auth 和蓝鲸网关鉴权。
+    displayOptions:
+      width: 960
+      height: 600
+      openMode: new_tab
+modules:
+  - name: default
+    isDefault: true
+    language: Python
+    spec:
+      processes:
+        - name: web
+          procCommand: bash /app/start.sh
+          replicas: 1
+          resQuotaPlan: default
+          probes:
+            liveness:
+              httpGet:
+                port: 5000
+                path: /healthz
+              initialDelaySeconds: 5
+              timeoutSeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
+            readiness:
+              httpGet:
+                port: 5000
+                path: /healthz
+              initialDelaySeconds: 3
+              timeoutSeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
+      configuration:
+        env:
+          - name: BEARER_TOKEN
+            value: test-token
+          - name: BASIC_USERNAME
+            value: bkuser
+          - name: BASIC_PASSWORD
+            value: bkuser
+          - name: USER_TOTAL
+            value: "120"
