@@ -117,10 +117,17 @@ class ApiTest(unittest.TestCase):
         departments = self._get("/apis/v1/departments?page=1&page_size=100").get_json()["results"]
 
         self.assertEqual([item["username"] for item in users[:3]], ["sanzhang", "sili", "wuwang"])
+        self.assertEqual(users[1]["full_name"], "李四（已更新）")
+        self.assertEqual(users[1]["email"], "lisi-updated@example.com")
+        self.assertEqual(users[1]["phone"], "13800138002")
         self.assertEqual(users[3]["departments"], ["dept_a", "dept_b"])
         self.assertEqual(users[3]["leaders"], ["100", "101"])
         self.assertEqual(users[4]["email"], "")
         self.assertEqual(users[4]["phone"], "")
+        self.assertEqual(users[5]["username"], "sunba")
+        self.assertEqual(users[5]["full_name"], "孙八")
+        self.assertEqual(users[5]["departments"], ["center_ba"])
+        self.assertEqual(users[5]["leaders"], ["101"])
 
         department_ids = {item["id"] for item in departments}
         user_ids = {item["id"] for item in users}

@@ -22,7 +22,7 @@ MIN_USER_TOTAL = 3
 MAX_USER_TOTAL = 10000
 MAX_PAGE_SIZE = 5000
 
-# 前三条用户、前三个部门与通用 HTTP 数据源协议示例一致，连通性测试拿到的第一条就是这组数据。
+# 张三、王五和前三个部门与协议示例一致，连通性测试拿到的第一条仍是张三。李四的资料已改成更新后的值。
 PROTOCOL_USERS = [
     {
         "id": "100",
@@ -38,9 +38,9 @@ PROTOCOL_USERS = [
     {
         "id": "101",
         "username": "sili",
-        "full_name": "李四",
-        "email": "1234567892@qq.com",
-        "phone": "12345678902",
+        "full_name": "李四（已更新）",
+        "email": "lisi-updated@example.com",
+        "phone": "13800138002",
         "phone_country_code": "86",
         "extras": {"gender": "female"},
         "leaders": ["100"],
@@ -81,6 +81,17 @@ QIANQI = {
     "extras": {"gender": "female"},
     "leaders": [],
     "departments": ["dept_b"],
+}
+SUNBA = {
+    "id": "105",
+    "username": "sunba",
+    "full_name": "孙八",
+    "email": "sunba@example.com",
+    "phone": "13800138008",
+    "phone_country_code": "86",
+    "extras": {"gender": "male"},
+    "leaders": ["101"],
+    "departments": ["center_ba"],
 }
 
 DEPARTMENTS = [
@@ -130,9 +141,12 @@ def build_users() -> list[dict[str, Any]]:
         users.append(ZHAOLIU)
     if total >= 5:
         users.append(QIANQI)
+    if total >= 6:
+        users.append(SUNBA)
 
     department_ids = [item["id"] for item in DEPARTMENTS]
-    serial = 105
+    # 105 留给孙八，自动补齐的用户从 106 开始，避免 id 冲突。
+    serial = 106
     while len(users) < total:
         suffix = f"{serial:04d}"
         users.append(
