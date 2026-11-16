@@ -1,5 +1,6 @@
-# 这套 PaaS 构建集群拉取 mirrors.tencent.com 的镜像仓库会返回 403，使用 Docker Hub 官方镜像。
-FROM python:3.11-slim-bookworm
+# 构建集群访问不了 Docker Hub，mirrors.tencent.com 的镜像仓库会返回 403。
+# 腾讯云镜像加速可匿名拉取官方 Python 镜像。
+FROM mirror.ccs.tencentyun.com/library/python:3.11-slim-bookworm
 
 USER root
 WORKDIR /app
@@ -7,8 +8,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PORT=5000 \
-    PIP_INDEX_URL=https://mirrors.cloud.tencent.com/pypi/simple \
-    PIP_TRUSTED_HOST=mirrors.cloud.tencent.com
+    PIP_INDEX_URL=https://mirrors.tencent.com/pypi/simple \
+    PIP_TRUSTED_HOST=mirrors.tencent.com
 
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir -r requirements.txt
