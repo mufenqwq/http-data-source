@@ -82,7 +82,7 @@ uv run --with flask --with phonenumbers python -m unittest tests.test_api
 
 开发者中心的模块名如果不是 `default`，把 `app_desc.yaml` 里的 `modules.name` 改成实际模块名。`app.bkAppCode` 只在 S-mart 打包时生效，普通应用以页面上创建的应用 ID 为准。
 
-镜像基于 `mirrors.tencent.com/blueking/python:3.11.14-ts4`。构建机拉不到这个镜像时，把 Dockerfile 第一行改成 `python:3.11-slim-bookworm`。
+镜像基于 Docker Hub 的 `python:3.11-slim-bookworm`。依赖从 `mirrors.cloud.tencent.com` 安装。
 
 进程监听 `PORT`，默认 5000，存活探针也访问 `5000/healthz`。平台如果把 Web 端口分配成别的值，同时改 `start.sh` 使用的端口和 `app_desc.yaml` 里的探针端口。
 
