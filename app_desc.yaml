@@ -22,6 +22,13 @@ modules:
           procCommand: bash /app/start.sh
           replicas: 1
           resQuotaPlan: default
+          services:
+            - name: web
+              protocol: TCP
+              exposedType:
+                name: bk/http
+              targetPort: 5000
+              port: 80
           probes:
             liveness:
               httpGet:
